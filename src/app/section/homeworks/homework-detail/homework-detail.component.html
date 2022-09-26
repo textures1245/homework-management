@@ -1,0 +1,200 @@
+<div class="p-5 font-light border text-sm border-gray-200 dark:border-gray-700">
+  <div class="lg:columns-2 flex-wrap items-center self-center my-auto">
+    <div class="flex flex-col gap-y-2 mt-2">
+      <div class="columns-2">
+        <div class="flex gap-x-2 mb-2 text-gray-500 dark:text-gray-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 text-yellow-300"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+          </svg>
+          <label class="font-[450]">{{ homework.course.courseId }} :</label>
+        </div>
+        <div>
+          <label class="">{{ homework.course.courseName }}</label>
+        </div>
+      </div>
+      <div class="columns-2">
+        <div class="flex gap-x-2 mb-2 text-gray-500 dark:text-gray-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 text-orange-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
+            />
+          </svg>
+          <label class="font-[450]">Instructor :</label>
+        </div>
+        <div class="flex-grow-0">
+          <p
+            class="font-light"
+          >
+            {{ homework.course.instructor }}
+          </p>
+        </div>
+      </div>
+      <div class="columns-2">
+        <div class="flex gap-x-2 mb-2 text-gray-500 dark:text-gray-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 text-emerald-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <label class="font-[450]">Created Date :</label>
+        </div>
+        <div class="">
+          <label for="">{{ homework.createdDate | date: "fullDate" }}</label>
+        </div>
+      </div>
+      <div class="columns-2">
+        <div class="flex gap-x-2 mb-2 text-gray-500 dark:text-gray-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 text-red-400 focus:text-red-700"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
+            />
+          </svg>
+          <label class="font-[450]">Deadline Date :</label>
+        </div>
+        <div class="">
+          <label for="">{{ homework.deadlineDate | date: "fullDate" }}</label>
+        </div>
+      </div>
+      <hr class="text-slate-400 mt-5" />
+      <div class="text-center mt-5">
+        <div
+          class="text-center justify-center gap-x-2 text-gray-500 dark:text-gray-400"
+        >
+          <p class="font-bold">Description</p>
+          <label for="">{{ homework.description }}</label>
+        </div>
+      </div>
+      <div class="flex text-center justify-around mt-3">
+        <button
+          type="button"
+          class="flex flex-col flex-shrink-0 justify-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+        >
+          Finished
+        </button>
+        <button
+          type="button"
+          class="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+    <!-- <div class="flex-row items-center justify-center mt-5">
+      <img
+        class="aspect-viddeo-16x9 bg-contain lg:w-3/4 md:w-3/4 rounded-md mb-2 mx-auto"
+        src="https://images.unsplash.com/photo-1657299156653-d3c0147ba3ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+        alt=""
+      />
+    </div> -->
+
+    <div
+      *ngIf="homework.imageUrl.length > 0 ? true : false"
+      id="controls-carousel"
+      class="relative lg:mt-0 mt-5"
+      data-carousel="static"
+    >
+      <!-- Carousel wrapper -->
+      <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+        <!-- Item 1 -->
+        <div
+          *ngFor="let imageSource of homework.imageUrl"
+          class="duration-700 ease-in-out absolute inset-0 transition-all transform -translate-x-full z-10"
+          data-carousel-item=""
+        >
+          <img
+            class="aspect-viddeo-16x9 bg-contain lg:w-3/4 md:w-3/4 rounded-md mb-2 mx-auto absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            [src]="imageSource"
+            alt=""
+          />
+        </div>
+      </div>
+      <!-- Slider controls -->
+      <div class="" id="button-slider-controls">
+        <button
+          type="button"
+          class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+          data-carousel-prev=""
+        >
+          <span
+            class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6 text-white dark:text-gray-800"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+            <span class="sr-only">Previous</span>
+          </span>
+        </button>
+        <button
+          type="button"
+          class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+          data-carousel-next=""
+        >
+          <span
+            class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-6 h-6 text-white dark:text-gray-800"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+            <span class="sr-only">Next</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

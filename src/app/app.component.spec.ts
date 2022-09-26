@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'homework-management-app'`, () => {
+  it(`should have as title 'homework-list-app'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('homework-management-app');
+    expect(app.title).toEqual('homework-list-app');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('homework-management-app app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('homework-list-app app is running!');
   });
 });

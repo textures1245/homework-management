@@ -1,0 +1,32 @@
+<div class="mx-auto gap-x-3 container">
+  <h1 class="text-2xl">Homework List Management {{version}}</h1>
+  <p class="font-light text-sm">Keep your homework list on date</p>
+  <hr class="mt-4" />
+  <br />
+  <div id="about" class="gap-4">
+    <button
+      (click)="onChangeView('about')"
+      class="text-white text-xs md:text-sm bg-gray-600 hover:bg-gray-700 p-2 rounded-md mr-2"
+    >
+      About
+    </button>
+    <button
+      (click)="onChangeView('detail')"
+      class="text-white text-xs md:text-sm bg-gray-600 hover:bg-gray-700 p-2 rounded-md"
+    >
+      Details
+    </button>
+    <div class="mt-3 text-base font-extralight">
+      <div *ngIf="changedDetail == 'about'">
+        <ul class="list-disc list-inside">
+          <li *ngFor="let detail of aboutDetail" class="my-3">{{ detail }}</li>
+        </ul>
+      </div>
+      <div *ngIf="changedDetail == 'detail'">
+        <ul class="list-disc list-inside">
+          <li *ngFor="let detail of details" class="my-3">{{ detail }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
