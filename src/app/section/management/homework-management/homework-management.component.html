@@ -2,8 +2,10 @@
   <div class="md:grid md:grid-cols-1 md:gap-6">
     <!--- Header -->
     <div id="header" class="">
-      <h1 class="text-2xl">Homework List</h1>
-      <p class="font-light text-sm">Keep your homework list on date</p>
+      <h1 class="text-2xl">Homework Management</h1>
+      <p class="font-light text-sm">
+        Easily manage your homework with simple UI management design
+      </p>
       <hr class="mt-4" />
     </div>
     <br />
@@ -43,7 +45,7 @@
 
     <!--- Form layout -->
     <div class="mt-5 md:mt-0 md:col-span-2">
-      <form action="#" method="POST">
+      <form [formGroup]="formObject" (ngSubmit)="onSubmit()">
         <div class="shadow sm:rounded-md sm:overflow-hidden">
           <div class="px-4 py-5 bg-white space-y-8 sm:p-6">
             <!--- Course Section -->
@@ -57,18 +59,26 @@
                   >
                   <select
                     id=""
+                    (change)="onSelectCourse($event)"
+                    formControlName="course"
                     class="block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option selected>Choose a Course</option>
-                    <option value="US">United States</option>
-                    <option value="CA">Canada</option>
-                    <option value="FR">France</option>
-                    <option value="DE">Germany</option>
+                    <option value="">Choose a Course</option>
+                    <option
+                      *ngFor="let c of courses; let i = index"
+                      [ngValue]="c"
+                    >
+                      {{ c.courseName }}
+                    </option>
                   </select>
                 </div>
               </div>
 
               <div
+                *ngIf="
+                  selectCourse != null ||
+                  this.formObject.get('course').value != null
+                "
                 id="courseDetail"
                 class="px-4 py-5 bg-white space-y-8 sm:p-6 border-2 rounded-md border-indigo-400"
               >
@@ -84,7 +94,7 @@
                       <span
                         class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm"
                       >
-                        http://
+                        {{ selectCourse.courseId }}
                       </span>
                       <div
                         type="text"
@@ -93,7 +103,7 @@
                         class="focus:ring-indigo-500 focus:border-indigo-500 h-10 w-full md:w-7/12 block rounded-none rounded-r-md text-sm border-gray-300"
                         placeholder="www.example.com"
                       >
-                        English
+                        {{ selectCourse.courseName }}
                       </div>
                     </div>
                   </div>
@@ -124,17 +134,7 @@
                               scope="row"
                               class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                             >
-                              Apple MacBook Pro 17"
-                            </th>
-                          </tr>
-                          <tr
-                            class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700"
-                          >
-                            <th
-                              scope="row"
-                              class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                            >
-                              Microsoft Surface Pro
+                              {{ selectCourse.instructor }}
                             </th>
                           </tr>
                         </tbody>
@@ -143,9 +143,26 @@
                   </div>
                 </div>
               </div>
+
+              <div id="isGroupWork" class="my-5">
+                <div class="">
+                  <label
+                    for=""
+                    class="mr-3 mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
+                    >Type of work</label
+                  >
+                  <select
+                    id=""
+                    (change)="onSelectTypeOfWork($event)"
+                    class="bg-gray-50 border w-1/5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option [ngValue]="0">Standalone</option>
+                    <option [ngValue]="1">Group</option>
+                  </select>
+                </div>
+              </div>
             </div>
             <!--- Homework Section -->
-
             <div [ngClass]="stepState == 2 ? '' : 'hidden'">
               <div class="">
                 <div class="grid grid-cols-4 -mt-6">
@@ -161,10 +178,19 @@
                         type="text"
                         name="company-website"
                         id="company-website"
+                        formControlName="title"
                         class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md text-sm border-gray-300"
                         placeholder="Homework Title"
                       />
                     </div>
+                    <span
+                      *ngIf="
+                        this.formObject.get('title')?.invalid &&
+                        this.formObject.get('title')?.touched
+                      "
+                      class="text-xs font-light text-rose-500"
+                      >This field can't be blank.</span
+                    >
                   </div>
                 </div>
               </div>
@@ -182,8 +208,17 @@
                     rows="3"
                     class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full text-sm border border-gray-300 rounded-md"
                     placeholder="What needs to be done?"
+                    formControlName="description"
                   ></textarea>
                 </div>
+                <span
+                  *ngIf="
+                    this.formObject.get('description')?.invalid &&
+                    this.formObject.get('description')?.touched
+                  "
+                  class="text-xs font-light text-rose-500"
+                  >This field can't be blank.</span
+                >
               </div>
               <div class="mt-4">
                 <label
@@ -213,6 +248,7 @@
                         type="date"
                         name="company-website"
                         id="company-website"
+                        formControlName="deadlineDate"
                         class="focus:ring-indigo-500 focus:border-indigo-500 h-10 w-full md:w-7/12 block rounded-none rounded-r-md text-sm border-gray-300"
                         placeholder=""
                       />
@@ -225,7 +261,11 @@
                   <div
                     class="lg:mt-10 mt-0 flex items-center justify-center col-span-1"
                   >
-                    <p class="font-bold text-sm">DAY/MOUNT/YEAR</p>
+                    <p class="font-bold text-sm">
+                      {{
+                        formObject.get("deadlineDate").value | date: "fullDate"
+                      }}
+                    </p>
                   </div>
                   <!-- <mat-form-field appearance="fill">
                     <mat-label>Choose a date</mat-label>
@@ -242,100 +282,235 @@
                   </mat-form-field> -->
                 </div>
               </div>
-            </div>
-            <!--- Image Section -->
-            <div [ngClass]="stepState == 3 ? '' : 'hidden'" class="">
-              <div class="lg:w-8/12 lg:translate-x-1/4 -mt-5">
-                <div
-                  id="controls-carousel"
-                  class="relative lg:mt-0 mt-5"
-                  data-carousel="static"
-                >
-                  <!-- Carousel wrapper -->
-                  <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-                    <!-- Item 1 -->
-                    <div
-                      class="duration-700 ease-in-out absolute inset-0 transition-all transform -translate-x-full z-10"
-                      data-carousel-item=""
+
+              <!--- Teammate form -->
+              <div *ngIf="enableGroupWorkOption" class="mt-4">
+                <hr />
+                <div class="flex justify-between mt-5">
+                  <h1
+                    class="flex items-center text-xl font-bold dark:text-white"
+                  >
+                    Group Management
+                    <span
+                      class="bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2"
+                      >Option</span
                     >
-                      <img
-                        class="aspect-viddeo-16x9 bg-contain lg:w-3/4 md:w-3/4 rounded-md mb-2 mx-auto absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                        [src]="imagePlaceholder"
-                        alt=""
-                      />
+                  </h1>
+                  <a
+                    name="addNewTeammate"
+                    (click)="onAddNewTeammate()"
+                    class="hover:cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emeral-600"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      /></svg
+                  ></a>
+                </div>
+
+                <div formArrayName="teammate">
+                  <div
+                    *ngFor="let tm of teammateControls; let i = index"
+                    [formGroupName]="i"
+                    class="mt-4"
+                  >
+                    <div class="columns-3">
+                      <div class="col-span-1 lg:col-span-2">
+                        <label
+                          for="homework-title"
+                          class="block text-sm  font-medium text-gray-700"
+                        >
+                          Prefix
+                        </label>
+                        <div class="mt-1 flex rounded-md">
+                          <select
+                            id=""
+                            formControlName="prefixName"
+                            (change)="onSelectPrefix($event)"
+                            class="bg-gray-50 border w-5/12 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          >
+                            <option [value]=""></option>
+                            <option [ngValue]="'Mr.'">Mr.</option>
+                            <option [ngValue]="'Ms.'">Ms.</option>
+                            <option [ngValue]="'นาย'">นาย</option>
+                            <option [ngValue]="'นาง'">นาง</option>
+                            <option [ngValue]="'นางสาว'">นางสาว</option>
+                          </select>
+                        </div>
+                        <span
+                          *ngIf="
+                            this.formObject.get('prefixName')?.invalid &&
+                            this.formObject.get('prefixName')?.touched
+                          "
+                          class="text-xs font-light text-rose-500"
+                          >This field can't be blank.</span
+                        >
+                      </div>
+                      <div class="col-span-1 lg:col-span-2">
+                        <label
+                          for="homework-title"
+                          class="block text-sm font-medium text-gray-700"
+                        >
+                          Name
+                        </label>
+                        <div class="mt-1 rounded-md shadow-sm">
+                          <input
+                            type="text"
+                            name="tm-name"
+                            formControlName="name"
+                            class="focus:ring-indigo-500 column-2 focus:border-indigo-500 flex-1 block w-full rounded-md text-sm border-gray-300"
+                            placeholder=""
+                          />
+                        </div>
+                        <span
+                          *ngIf="
+                            this.formObject.get('name')?.invalid &&
+                            this.formObject.get('name')?.touched
+                          "
+                          class="text-xs font-light text-rose-500"
+                          >This field can't be blank.</span
+                        >
+                      </div>
+                      <div class="col-span-3 lg:col-span-2">
+                        <label
+                          for="homework-title"
+                          class="block text-sm font-medium text-gray-700"
+                        >
+                          Code
+                        </label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                          <input
+                            type="text"
+                            name="tm-code"
+                            formControlName="tm_code"
+                            class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md text-sm border-gray-300"
+                            placeholder=""
+                          />
+                        </div>
+                        <span
+                          *ngIf="
+                            this.formObject.get('tm_code')?.invalid &&
+                            this.formObject.get('tm_code')?.touched
+                          "
+                          class="text-xs font-light text-rose-500"
+                          >This field can't be blank.</span
+                        >
+                      </div>
                     </div>
-                    <div
-                      class="duration-700 ease-in-out absolute inset-0 transition-all transform -translate-x-full z-10"
-                      data-carousel-item=""
-                    ></div>
-                  </div>
-                  <!-- Slider controls -->
-                  <div class="" id="button-slider-controls">
-                    <button
-                      type="button"
-                      class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                      data-carousel-prev=""
-                    >
-                      <span
-                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+                    <div class="mt-3">
+                      <label
+                        for="about"
+                        class="block text-sm font-medium text-gray-700"
                       >
-                        <svg
-                          aria-hidden="true"
-                          class="w-6 h-6 text-white dark:text-gray-800"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M15 19l-7-7 7-7"
-                          ></path>
-                        </svg>
-                        <span class="sr-only">Previous</span>
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                      data-carousel-next=""
-                    >
+                        About
+                      </label>
+                      <div class="mt-1">
+                        <textarea
+                          id="about"
+                          name="assigned"
+                          rows="3"
+                          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full text-sm border border-gray-300 rounded-md"
+                          placeholder="What needs to be done?"
+                          formControlName="assigned"
+                        ></textarea>
+                      </div>
                       <span
-                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+                        *ngIf="
+                          this.formObject.get('assigned')?.invalid &&
+                          this.formObject.get('assigned')?.touched
+                        "
+                        class="text-xs font-light text-rose-500"
+                        >This field can't be blank.</span
                       >
-                        <svg
-                          aria-hidden="true"
-                          class="w-6 h-6 text-white dark:text-gray-800"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9 5l7 7-7 7"
-                          ></path>
-                        </svg>
-                        <span class="sr-only">Next</span>
-                      </span>
-                    </button>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="mt-3">
-                <div class="flex justify-between">
+            </div>
+            <!--- Image Section -->
+            <div [ngClass]="stepState == 3 ? '' : 'hidden'" class="">
+              <div
+                *ngIf="
+                  this.formObject.get('imageUrls').value.length > 0 &&
+                  this.formObject.get('imageUrls').value[0].imageUrls !== null
+                "
+                class="lg:w-8/12 lg:translate-x-1/4 -mt-5"
+              >
+                <div
+                  [id]="'carousel-editor'"
+                  class="carousel slide relative h-full w-full"
+                  data-bs-ride="carousel"
+                >
+                  <div
+                    class="carousel-inner relative w-full h-56 overflow-hidden rounded-lg md:h-96"
+                  >
+                    <div
+                      *ngFor="
+                        let imageSource of this.formObject.get('imageUrls')
+                          .value;
+                        let i = index
+                      "
+                      [ngClass]="i === 0 ? 'active' : ''"
+                      class="carousel-item transition-all duration-700 ease-in-out z-10"
+                    >
+                      <img
+                        [src]="imageSource.imageUrls"
+                        class="aspect-viddeo-16x9 bg-contain lg:w-3/4 md:w-3/4 rounded-md mb-2 mx-auto absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                        [alt]=""
+                      />
+                    </div>
+                  </div>
+                  <button
+                    class="carousel-control-prev absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline left-0"
+                    type="button"
+                    [attr.data-bs-target]="'#carousel-editor'"
+                    data-bs-slide="prev"
+                  >
+                    <span
+                      class="carousel-control-prev-icon inline-block bg-no-repeat"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button
+                    class="carousel-control-next absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline right-0"
+                    type="button"
+                    [attr.data-bs-target]="'#carousel-editor'"
+                    data-bs-slide="next"
+                  >
+                    <span
+                      class="carousel-control-next-icon inline-block bg-no-repeat"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
+              </div>
+              <div formArrayName="imageUrls">
+                <div class="flex justify-between mt-3">
                   <label
                     for="about"
                     class="block text-sm font-medium text-gray-700"
                   >
                     URLs
+                    <p class="text-xs font-light text-slate-500">
+                      If you don't have any image for insert, just left it by
+                      default.
+                    </p>
                   </label>
-                  <button
-                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-emerald-500 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emeral-600"
+                  <a
+                    name="addNewImageUrl"
+                    (click)="onAddNewImageUrl()"
+                    class="hover:cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-emerald-500 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emeral-600"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -351,38 +526,70 @@
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                       />
                     </svg>
-                  </button>
+                  </a>
                 </div>
-                <div class="my-3 flex rounded-md shadow-sm">
-                  <div class="mt-1 w-full flex rounded-md shadow-sm">
-                    <button
-                      type="button"
-                      class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-red-300 bg-red-300 hover:bg-red-500 hover:border-red-500 text-white text-sm"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
+                <div class="flex justify-between mt-2">
+                  <label class="block">
+                    <span class="sr-only text-sm">Choose File</span>
                     <input
-                      type="text"
-                      name="company-website"
-                      id="company-website"
-                      class="focus:ring-indigo-500 focus:border-indigo-500 h-10 w-full block rounded-none rounded-r-md text-sm border-gray-300"
-                      placeholder="www.example.com"
+                      type="file"
+                      (change)="onFileSelected($event)"
+                      name="image"
+                      class="block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
+                  </label>
+                  <a
+                    class="md:text-sm cursor-pointer text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-xs px-5 py-2.5 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+                    (click)="onUpload()"
+                    >Upload</a
+                  >
+                </div>
+                <div
+                  *ngFor="let c of controls; let i = index"
+                  [formGroupName]="i"
+                  class="mt-3"
+                >
+                  <div class="flex rounded-md shadow-sm">
+                    <div class="mt-2 w-full flex rounded-md shadow-sm">
+                      <button
+                        (click)="onRemoveImageControl(i)"
+                        type="button"
+                        class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-red-300 bg-red-300 hover:bg-red-500 hover:border-red-500 text-white text-sm"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                      <input
+                        type="text"
+                        name="company-website"
+                        id="company-website"
+                        formControlName="imageUrls"
+                        class="focus:ring-indigo-500 focus:border-indigo-500 h-10 w-full block rounded-none rounded-r-md text-sm border-gray-300"
+                        placeholder="www.example.com"
+                      />
+                    </div>
                   </div>
                 </div>
+                <span
+                  *ngIf="
+                    this.formObject.get('imageUrls').invalid &&
+                    this.formObject.get('imageUrls')?.touched
+                  "
+                  class="text-xs font-light text-rose-500 mt-3"
+                  >URLs pattern are invalid!</span
+                >
               </div>
             </div>
           </div>
@@ -411,8 +618,9 @@
             </div>
             <div *ngIf="stepState == 3" class="px-4 py-3 sm:px-6">
               <button
-                type="button"
-                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm md:text-sm text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                [disabled]="this.formObject.invalid"
+                type="submit"
+                class="disabled:opacity-75 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm md:text-sm text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

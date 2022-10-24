@@ -36,9 +36,7 @@
           <label class="font-[450]">Instructor :</label>
         </div>
         <div class="flex-grow-0">
-          <p
-            class="font-light"
-          >
+          <p class="font-light">
             {{ homework.course.instructor }}
           </p>
         </div>
@@ -81,6 +79,24 @@
           <label for="">{{ homework.deadlineDate | date: "fullDate" }}</label>
         </div>
       </div>
+      <div *ngIf="homework.finishedDate !== null" class="columns-2">
+        <div class="flex gap-x-2 mb-2 text-gray-500 dark:text-gray-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            class="w-4 h-4 text-blue-500 focus:text-blue-600"
+          >
+            <path
+              d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.289z"
+            />
+          </svg>
+          <label class="font-[450]">Submitted Date :</label>
+        </div>
+        <div class="">
+          <label for="">{{ homework.finishedDate | date: "fullDate" }}</label>
+        </div>
+      </div>
       <hr class="text-slate-400 mt-5" />
       <div class="text-center mt-5">
         <div
@@ -91,23 +107,77 @@
         </div>
       </div>
       <div class="flex text-center justify-around mt-3">
-        <button
+        <div *ngIf="homework.status === 0" #container class="flex">
+          <button
+            (click)="onFinishedHomework(homework.h_id); confettiWhenFinished()"
+            type="button"
+            class="flex flex-col flex-shrink-0 justify-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          >
+            Finished
+          </button>
+        </div>
+        <a
+          (click)="onNavigatedToEditMode(homework.h_id)"
           type="button"
-          class="flex flex-col flex-shrink-0 justify-center text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-        >
-          Finished
-        </button>
-        <button
-          type="button"
-          class="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          class="hover:cursor-pointer text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
         >
           Edit
-        </button>
+        </a>
         <button
+          (click)="onDeleteHomework(homework.h_id)"
           type="button"
           class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
         >
           Delete
+        </button>
+      </div>
+    </div>
+    <div *ngIf="homework.imageUrls != null" class="mt-3">
+      <div
+        [id]="'carousel-' + homework.h_id"
+        class="carousel slide relative h-full w-full"
+        data-bs-ride="carousel"
+      >
+        <div
+          class="carousel-inner relative w-full h-56 overflow-hidden rounded-lg md:h-96"
+        >
+          <div
+            *ngFor="let imageSource of homework.imageUrls; let i = index"
+            [ngClass]="i === 0 ? 'active' : ''"
+            class="carousel-item transition-all duration-700 ease-in-out z-10"
+          >
+            <a [href]="imageSource" target="_blank">
+              <img
+                [src]="imageSource"
+                class="hover:opacity-90 hover:duration-200 hover:cursor-zoom-in hover:object-scale-down object-cover aspect-viddeo-16x9 bg-contain lg:w-3/4 md:w-3/4 rounded-md mb-2 mx-auto absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                [alt]=""
+              />
+            </a>
+          </div>
+        </div>
+        <button
+          class="carousel-control-prev absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline left-0"
+          type="button"
+          [attr.data-bs-target]="'#carousel-' + homework.h_id"
+          data-bs-slide="prev"
+        >
+          <span
+            class="carousel-control-prev-icon inline-block bg-no-repeat"
+            aria-hidden="true"
+          ></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline right-0"
+          type="button"
+          [attr.data-bs-target]="'#carousel-' + homework.h_id"
+          data-bs-slide="next"
+        >
+          <span
+            class="carousel-control-next-icon inline-block bg-no-repeat"
+            aria-hidden="true"
+          ></span>
+          <span class="visually-hidden">Next</span>
         </button>
       </div>
     </div>
@@ -119,19 +189,17 @@
       />
     </div> -->
 
-    <div
-      *ngIf="homework.imageUrl.length > 0 ? true : false"
+    <!-- <div
+      *ngIf="homework.imageUrls.length > 0 ? true : false"
       id="controls-carousel"
       class="relative lg:mt-0 mt-5"
       data-carousel="static"
     >
-      <!-- Carousel wrapper -->
-      <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-        <!-- Item 1 -->
-        <div
-          *ngFor="let imageSource of homework.imageUrl"
+    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+    <div
+          *ngFor="let imageSource of homework.imageUrls"
           class="duration-700 ease-in-out absolute inset-0 transition-all transform -translate-x-full z-10"
-          data-carousel-item=""
+          data-carousel-item="#controls-carousel"
         >
           <img
             class="aspect-viddeo-16x9 bg-contain lg:w-3/4 md:w-3/4 rounded-md mb-2 mx-auto absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
@@ -140,8 +208,7 @@
           />
         </div>
       </div>
-      <!-- Slider controls -->
-      <div class="" id="button-slider-controls">
+    <div class="" id="button-slider-controls">
         <button
           type="button"
           class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
@@ -194,7 +261,54 @@
             <span class="sr-only">Next</span>
           </span>
         </button>
-      </div>
+      </div> -->
+    <!-- </div> -->
+  </div>
+  <div *ngIf="homework.groupWork.g_id !== null" class="mt-7">
+    <hr class="border-gray-300" />
+    <br />
+    <div class="flex justify-center">
+      <span
+        class="bg-blue-100 text-blue-800 text-sm absolute font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
+        >Members</span
+      >
+      <table
+        mat-table
+        [dataSource]="teammateRecordsSchema"
+        class="mat-elevation-z8 mt-2"
+      >
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="prefix">
+          <th mat-header-cell *matHeaderCellDef>Prefix</th>
+          <td mat-cell *matCellDef="let element">{{ element.prefixName }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef>Code</th>
+          <td mat-cell *matCellDef="let element">{{ element.tm_code }}</td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="assigned">
+          <th mat-header-cell *matHeaderCellDef>Assigned</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.assigned | shorten: 120 }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
     </div>
   </div>
 </div>

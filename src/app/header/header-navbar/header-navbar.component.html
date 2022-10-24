@@ -86,9 +86,18 @@
           </li>
           <li>
             <a
-              href="#"
+              routerLink="/finished-homework-list"
+              routerLinkActive="bg-gray-300"
               class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-200 dark:text-white"
               >Finished Homework Lists</a
+            >
+          </li>
+          <li>
+            <a
+              routerLink="/group-homework-list"
+              routerLinkActive="bg-gray-300"
+              class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-200 dark:text-white"
+              >Group Homework Lists</a
             >
           </li>
         </ul>
@@ -159,7 +168,7 @@
 
 <!--- Mobile screen navbar -->
 <nav
-  class=" z-10 md:hidden top-0 sticky bg-gray-200 border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900"
+  class="z-10 md:hidden top-0 sticky bg-gray-200 border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900"
 >
   <div class="container flex flex-wrap justify-between items-center mx-auto">
     <button
@@ -190,17 +199,21 @@
       >
         <li>
           <a
-            href="#"
-            class="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white"
+            routerLink="/overviews"
+            routerLinkActive="bg-slate-400 rounded-md"
+            class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:bg-slate-300 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white focus:bg-gray-400 focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
             aria-current="page"
             >Overview</a
           >
         </li>
-        <li>
+        <li
+          routerLinkActive="text-white bg-slate-400 rounded-md"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
           <button
             id="dropdownNavbarLink"
             data-dropdown-toggle="dropdownNavbar"
-            class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:!bg-blue-500 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white focus:bg-blue-500 focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
+            class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:bg-slate-300 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white focus:bg-gray-400 focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
           >
             Homework
             <svg
@@ -228,26 +241,34 @@
             >
               <li>
                 <a
-                  href="#"
+                  routerLink="/homework-list"
                   class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >Homework List</a
                 >
               </li>
               <li>
                 <a
-                  href="#"
+                  routerLink="/finished-homework-list"
                   class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                   >Finished Homework List</a
+                >
+                <a
+                  routerLink="/group-homework-list"
+                  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Group Homework List</a
                 >
               </li>
             </ul>
           </div>
         </li>
-        <li>
+        <li
+          routerLinkActive="text-white bg-slate-400 rounded-md"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
           <button
             id="dropdownNavbarLink"
             data-dropdown-toggle="dropdownNavbar2"
-            class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:!bg-blue-500 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white focus:bg-blue-500 focus:text-white dark:border-gray-700 dark:hover:bg-gray-700"
+            class="flex justify-between items-center py-2 pr-4 pl-3 w-full font-medium text-gray-700 rounded hover:bg-slate-300 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-gray-400 dark:hover:text-white focus:bg-gray-400 focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent"
           >
             Management
             <svg
@@ -275,14 +296,14 @@
             >
               <li>
                 <a
-                  href="#"
+                  routerLink="/homework-management"
                   class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
                   >Homework Management</a
                 >
               </li>
               <li>
                 <a
-                  href="#"
+                  routerLink="course-management"
                   class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
                   >Subject Management</a
                 >

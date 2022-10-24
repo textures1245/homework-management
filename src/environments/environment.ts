@@ -3,7 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  mysql: {
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'rty1245',
+    database: 'homeworkDB',
+  },
 };
 
 /*

@@ -21,9 +21,23 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EffectsModule } from '@ngrx/effects';
+import { HttpClientModule } from '@angular/common/http';
+import { HomeworkEffects } from './section/management/homework-management/store/homework.effects';
+import { CourseEffect } from './section/management/subject-management/store/course.effect';
+import { FilterMenuComponent } from './section/homeworks/filter-menu/filter-menu.component';
+import { AlertsComponent } from './shared/alerts/alerts.component';
+import { FormsModule } from '@angular/forms';
+import { GroupHomeworkComponent } from './section/homeworks/group-homework/group-homework.component';
+import {MatTableModule} from '@angular/material/table';
+
+import { ShortenPipe } from './shared/pipes/shorten.pipe';
+
 
 @NgModule({
   declarations: [
@@ -36,6 +50,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     HomeworkDetailComponent,
     FinishedHomeworkListComponent,
     OverviewComponent,
+    FilterMenuComponent,
+    AlertsComponent,
+    GroupHomeworkComponent,
+    ShortenPipe
   ],
   imports: [
     BrowserModule,
@@ -47,9 +65,15 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
+    MatPaginatorModule,
+    NgxPaginationModule,
     ReactiveFormsModule,
-    StoreDevtoolsModule.instrument({logOnly: environment.production}),
+    MatTableModule,
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([HomeworkEffects, CourseEffect]),
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

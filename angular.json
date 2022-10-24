@@ -27,7 +27,8 @@
               "src/styles.css"
             ],
             "scripts": [
-              "./node_modules/flowbite/dist/flowbite.js"
+              "./node_modules/flowbite/dist/flowbite.js",
+              "./node_modules/canvas-confetti/dist/confetti.browser.js"
             ]
           },
           "configurations": {

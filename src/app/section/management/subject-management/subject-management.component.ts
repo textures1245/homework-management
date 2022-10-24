@@ -8,10 +8,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { EMPTY, map, Observable } from 'rxjs';
+import { EMPTY, map, Observable, Subscription } from 'rxjs';
 import { Course } from 'src/app/shared/models/course.model';
 import * as fromGlobal from '../../../shared/store/app.reducer';
 import * as CourseAction from '../subject-management/store/course.action';
+import * as HomeworkAction from '../homework-management/store/homework.action';
+import { SharedService } from 'src/app/shared/shared.service';
 
 @Component({
   selector: 'app-subject-management',
@@ -22,14 +24,25 @@ export class SubjectManagementComponent implements OnInit {
   courses$: Observable<{ courses: Course[] }> = EMPTY;
   courses: Course[] = [];
   formCourseGroup: FormGroup;
+  editMode = false;
+  controlsLength: number = 0;
+  _clearHomeworkChecker$ = Subscription.EMPTY;
+
   constructor(
     public store: Store<fromGlobal.AppState>,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    private sharedService: SharedService
   ) {}
 
   ngOnInit(): void {
+    this.store.dispatch(new HomeworkAction.ClearEditState());
+
     this.courses$ = this.store.select('courseState');
     this.initialForm();
+
+    this.controlsLength = (<FormArray>(
+      this.formCourseGroup.get('formCourses')
+    )).controls.length;
   }
 
   private initialForm() {
@@ -79,6 +92,7 @@ export class SubjectManagementComponent implements OnInit {
   }
 
   get controls() {
+    this.controlsLength++;
     return (<FormArray>this.formCourseGroup.get('formCourses')).controls;
   }
 
@@ -93,22 +107,63 @@ export class SubjectManagementComponent implements OnInit {
   }
 
   onRemoveCourse(index: number) {
-    (<FormArray>this.formCourseGroup.get('formCourses')).removeAt(index);
+    const course = this.courses.find((c, i) => {
+      return i === index;
+    });
+
+    let preventDelete = false;
+    if (course) {
+      this._clearHomeworkChecker$ = this.store
+        .select('homeworkState')
+        .pipe(map((hState) => hState.homeworks))
+        .subscribe((h) => {
+          h.map((h, i) => {
+            if (h.course.courseId === course.courseId) {
+              preventDelete = true;
+              this.sharedService.alertCommandAction.next({
+                alertCmd: 'ALERT_WARNING',
+                alertTopic: 'Prevent Deleted',
+                alertDesc:
+                  "Please delete course's host before remove this course",
+              });
+            }
+          });
+        });
+    }
+
+    if (!preventDelete) {
+      (<FormArray>this.formCourseGroup.get('formCourses')).removeAt(index);
+    }
+    if (course && !preventDelete) {
+      this.store.dispatch(new CourseAction.DeleteCourse(course.id));
+      this.sharedService.alertCommandAction.next({
+        alertCmd: 'ALERT_SUCCESS',
+        alertTopic: `Deleted Course Successfully`,
+        alertDesc: `Course's code ${course.courseId} had been removed from course list`,
+      });
+    }
+  }
+
+  onEditMode() {
+    this.editMode = true;
   }
 
   onSubmit() {
-    console.log(this.formCourseGroup.get('formCourses').getRawValue());
-    this.store.dispatch(
-      new CourseAction.AddCourse({
-        ...this.formCourseGroup.get('formCourses').getRawValue(),
-      })
-    );
-    this.store
-      .select('courseState')
-      .pipe(map((state) => state.courses))
-      .subscribe((stateCourse: Course[]) => {
-        this.courses = stateCourse;
-        console.log(this.courses)
+    let courseValue = this.formCourseGroup.get('formCourses').value;
+    let addNewCourses = courseValue.slice(this.courses.length);
+    if (addNewCourses.length > 0) {
+      this.store.dispatch(new CourseAction.AddCourses(addNewCourses));
+      this.sharedService.alertCommandAction.next({
+        alertCmd: 'ALERT_SUCCESS',
+        alertTopic: 'Add Course Successfully',
+        alertDesc: 'New courses had been now added to the list',
       });
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this._clearHomeworkChecker$) {
+      this._clearHomeworkChecker$.unsubscribe();
+    }
   }
 }

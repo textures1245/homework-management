@@ -1,0 +1,29 @@
+input.ng-valid.ng-touched {
+  border-color: #5cb85c;
+  background-color: rgb(209 250 229);
+}
+
+input.ng-invalid.ng-touched {
+  border-color: #d9534f;
+  background-color: rgb(254, 205, 211);
+}
+
+input.ng-invalid.ng-touched::placeholder {
+  color: rgba(0, 0, 0, 0.607);
+}
+
+
+textarea.ng-valid.ng-touched {
+  border-color: #5cb85c;
+  background-color: rgb(209 250 229);
+
+}
+
+textarea.ng-invalid.ng-touched {
+  border-color: #d9534f;
+  background-color: rgb(254 205 211);
+}
+
+textarea.ng-invalid.ng-touched::placeholder {
+  color: rgba(0, 0, 0, 0.607);
+}

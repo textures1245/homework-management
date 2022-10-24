@@ -1,0 +1,208 @@
+<div class="flex justify-end">
+  <div class="flex items-center">
+    <div class="relative inline-block text-left">
+      <div>
+        <button
+          (click)="toggleGroupFilter = !toggleGroupFilter"
+          type="button"
+          class="md:text-sm text-xs group inline-flex justify-center font-medium text-gray-700 hover:text-gray-900"
+          id="menu-button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="md:h-4 md:w-4 h-3 w-3 mr-1 text-yellow-300 focus:text-yellow-700"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+          </svg>
+          {{ courseGroupSelectName }}
+          <!-- Heroicon name: mini/chevron-down -->
+          <svg
+            class="-mr-1 ml-1 md:!h-5 md:!w-5 h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        [ngClass]="
+          toggleGroupFilter
+            ? 'transition ease-out duration-100 transform opacity-100 scale-100 visible'
+            : 'transition ease-in duration-75 transform opacity-0 scale-95 invisible'
+        "
+        class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-slate-700 ring-opacity-5 focus:outline-none"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="menu-button"
+        tabindex="-1"
+      >
+        <div class="py-1" role="none">
+          <a
+            (click)="onSelectedCourseGroup(-1, 'All')"
+            [ngClass]="
+              courseGroupSelectId == -1
+                ? 'bg-gray-100 font-medium text-gray-900'
+                : 'text-gray-500 hover:bg-slate-100'
+            "
+            class="hover:cursor-pointer font-medium text-gray-900 block px-4 py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            >All</a
+          >
+          <a
+            *ngFor="let c of coursesGroup"
+            (click)="onSelectedCourseGroup(c.c_id, c.courseCode)"
+            [ngClass]="
+              courseGroupSelectId == c.c_id
+                ? 'bg-gray-100 font-medium text-gray-900'
+                : 'text-gray-500 hover:bg-slate-100'
+            "
+            class="hover:cursor-pointer font-medium text-gray-900 block px-4 py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            >{{ c.courseCode }}</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mx-2 text-gray-200">|</div>
+
+  <div class="flex items-center">
+    <div class="relative inline-block text-left">
+      <div>
+        <button
+          (click)="toggleSortFilter = !toggleSortFilter"
+          type="button"
+          class="md:text-sm text-xs group inline-flex justify-center font-medium text-gray-700 hover:text-gray-900"
+          id="menu-button"
+          aria-expanded="false"
+          aria-haspopup="true"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            class="md:w-4 md:h-4 w-3 h-3 mr-2"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2.24 6.8a.75.75 0 001.06-.04l1.95-2.1v8.59a.75.75 0 001.5 0V4.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0L2.2 5.74a.75.75 0 00.04 1.06zm8 6.4a.75.75 0 00-.04 1.06l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75a.75.75 0 00-1.5 0v8.59l-1.95-2.1a.75.75 0 00-1.06-.04z"
+              clip-rule="evenodd"
+            />
+          </svg>
+
+          {{ modeName }}
+          <!-- Heroicon name: mini/chevron-down -->
+          <svg
+            class="-mr-1 ml-1 md:!h-5 md:!w-5 h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!--
+        Dropdown menu, show/hide based on menu state.
+
+        Entering: "transition ease-out duration-100"
+          From: "transform opacity-0 scale-95"
+          To: "transform opacity-100 scale-100"
+        Leaving: "transition ease-in duration-75"
+          From: "transform opacity-100 scale-100"
+          To: "transform opacity-0 scale-95"
+      -->
+      <div
+        [ngClass]="
+          toggleSortFilter
+            ? 'transition ease-out duration-100 transform opacity-100 scale-100 visible'
+            : 'transition ease-in duration-75 transform opacity-0 scale-95 invisible'
+        "
+        class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-slate-700 ring-opacity-5 focus:outline-none"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="menu-button"
+        tabindex="-1"
+      >
+        <div class="py-1" role="none">
+          <!--
+            Active: "bg-gray-100", Not Active: ""
+
+            Selected: "font-medium text-gray-900", Not Selected: "text-gray-500"
+          -->
+          <a
+            (click)="onChangedSortMode('LEAST_REMAINING', 'Least Remaining')"
+            [ngClass]="
+              sortSelectedMode == 'LEAST_REMAINING'
+                ? 'bg-gray-100 font-medium text-gray-900'
+                : 'text-gray-500 hover:bg-slate-100'
+            "
+            class="hover:cursor-pointer font-medium text-gray-900 block px-4 py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            >Least Remaining</a
+          >
+
+          <a
+            (click)="onChangedSortMode('MOST_REMAINING', 'Most Remaining')"
+            [ngClass]="
+              sortSelectedMode == 'MOST_REMAINING'
+                ? 'bg-gray-100 font-medium !text-gray-900'
+                : 'text-gray-500 hover:bg-slate-100'
+            "
+            class="hover:cursor-pointer text-gray-500 block px-4 py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            >Most Remaining</a
+          >
+
+          <a
+            (click)="onChangedSortMode('NEWEST_CREATED', 'Newest Created')"
+            [ngClass]="
+              sortSelectedMode == 'NEWEST_CREATED'
+                ? 'bg-gray-100 font-medium !text-gray-900'
+                : 'text-gray-500 hover:bg-slate-100'
+            "
+            class="hover:cursor-pointer text-gray-500 block px-4 py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            >Newest Created</a
+          >
+
+          <a
+            (click)="onChangedSortMode('OLDEST_CREATED', 'Oldest Created')"
+            [ngClass]="
+              sortSelectedMode == 'OLDEST_CREATED'
+                ? 'bg-gray-100 font-medium text-gray-900'
+                : 'text-gray-500 hover:bg-slate-100'
+            "
+            class="hover:cursor-pointer font-medium text-gray-900 block px-4 py-2 text-sm"
+            role="menuitem"
+            tabindex="-1"
+            >Oldest Created</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

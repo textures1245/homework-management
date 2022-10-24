@@ -1,0 +1,23 @@
+canvas {
+  width: 40%;
+  position: absolute;
+  transform: translate(-40%, -35%);
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-prefix {
+  font-size: 12px;
+}
+.mat-column-name {
+  font-size: 12px;
+}
+.mat-column-code {
+  font-size: 12px;
+}
+.mat-column-assigned {
+  padding-left: 2rem;
+  font-size: 12px;
+}

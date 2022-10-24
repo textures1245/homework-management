@@ -2,8 +2,11 @@
   <div class="md:grid md:grid-cols-1 md:gap-6">
     <!--- Header -->
     <div id="header" class="">
-      <h1 class="text-2xl">Homework List</h1>
-      <p class="font-light text-sm">Keep your homework list on date</p>
+      <h1 class="text-2xl">Subject Management</h1>
+      <p class="font-light text-sm">
+        Managed what course you had learned, for tracking what homework's
+        subject you had done
+      </p>
       <hr class="mt-4" />
     </div>
     <br />
@@ -112,10 +115,9 @@
                 class="pb-3 px-3 border rounded-md border-slate-500"
               >
                 <div class="text-right -mr-3 -mt-1">
-                  <button
-                    type="button"
+                  <a
                     (click)="onAddNewCourse()"
-                    class="inline-flex visible justify-center py-1.5 px-3 border-r-0 border-none border-transparent shadow-sm md:text-sm text-xs font-medium rounded-sm rounded-r-none text-white bg-emerald-500 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                    class="hover:cursor-pointer inline-flex visible justify-center py-1.5 px-3 border-r-0 border-none border-transparent shadow-sm md:text-sm text-xs font-medium rounded-sm rounded-r-none text-white bg-emerald-500 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +133,7 @@
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                       />
                     </svg>
-                  </button>
+                  </a>
                   <button
                     type="button"
                     (click)="onRemoveCourse(i)"
@@ -181,7 +183,7 @@
                       type="text"
                       name="courseName"
                       class="focus:ring-indigo-500 focus:border-indigo-500 h-10 w-9/12 block rounded-none rounded-r-md md:text-sm text-xs border-gray-300"
-                      placeholder="www.example.com"
+                      placeholder="Subject's name"
                     />
                   </div>
                 </div>
@@ -242,16 +244,40 @@
                       #courseName
                       formControlName="instructor"
                       class="focus:ring-indigo-500 focus:border-indigo-500 h-10 w-full block rounded-none rounded-r-md md:text-sm text-xs border-gray-300"
-                      placeholder="www.example.com"
+                      placeholder="Instructor's name"
                     />
                   </div>
                 </div>
               </div>
             </div>
-            <div class="px-4 py-2 bg-gray-50 text-right sm:px-6 sm:py-3">
+            <div class="px-4 py-2 bg-gray-50 float-right sm:px-6 sm:py-3">
+              <!-- <a
+                (click)="onEditMode()"
+                class="hover:cursor-pointer inline-flex justify-center py-2 px-5 border border-transparent shadow-sm md:text-sm text-xs font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4 mr-1"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                  />
+                </svg>
+
+                Edit
+              </a> -->
               <button
+                [disabled]="
+                  formCourseGroup.invalid
+                "
                 type="submit"
-                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm md:text-sm text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                class="disabled:opacity-60 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm md:text-sm text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
