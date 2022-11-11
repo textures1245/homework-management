@@ -34,6 +34,7 @@ export class TeammateRecordsSchema {
 export class HomeworkDetailComponent implements OnInit, OnDestroy {
   @Input() homework: Homework;
   _clearNavigatedEditor = Subscription.EMPTY;
+  _clearAlertMessage$ = Subscription.EMPTY;
   @ViewChild('container') container: ElementRef<HTMLDivElement>;
   finishedStatusClicked = false;
   displayedColumns: string[] = ['prefix', 'name', 'code', 'assigned'];
@@ -60,7 +61,11 @@ export class HomeworkDetailComponent implements OnInit, OnDestroy {
   }
 
   onDeleteHomework(homeworkId: number) {
-    this.store.dispatch(new HomeworkAction.DeleteHomework(homeworkId));
+    if (this.homework.groupWork.g_id == null) {
+      this.store.dispatch(new HomeworkAction.DeleteHomework(homeworkId, null));
+    } else {
+      this.store.dispatch(new HomeworkAction.DeleteHomework(homeworkId, 'delAsGroup'))
+    }
     this.sharedService.alertCommandAction.next({
       alertCmd: 'ALERT_SUCCESS',
       alertTopic: 'Delete Homework Successfully',

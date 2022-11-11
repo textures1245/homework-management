@@ -22,10 +22,12 @@ export class HomeworkEffects {
       ),
       withLatestFrom(this.store.select('homeworkState')),
       switchMap(([fetchMode, hState]) => {
-        const reqMode = hState.fetchMode
-        const reqGroupCourseId = hState.courseFilterId
+        const reqMode = hState.fetchMode;
+        const reqGroupCourseId = hState.courseFilterId;
         return this.http
-          .put<{ message: string; data: any[] }>(this.homeworkApi + reqMode, {c_id: reqGroupCourseId})
+          .put<{ message: string; data: any[] }>(this.homeworkApi + reqMode, {
+            c_id: reqGroupCourseId,
+          })
           .pipe(
             map((homeworksData) => {
               return homeworksData.data.map((h) => {
@@ -39,8 +41,16 @@ export class HomeworkEffects {
                     finishedDate: h.finishedDate,
                     status: h.status,
                     imageUrls: h.imageURL,
-                    course: new Course(h.c_id, h.courseId, h.courseName, h.i_name),
-                    groupWork: new GroupWork(null, new Teammate(null, null, null, null, null, null))
+                    course: new Course(
+                      h.c_id,
+                      h.courseId,
+                      h.courseName,
+                      h.i_name
+                    ),
+                    groupWork: new GroupWork(
+                      null,
+                      new Teammate(null, null, null, null, null, null)
+                    ),
                   };
                 } else {
                   return {
@@ -52,9 +62,24 @@ export class HomeworkEffects {
                     finishedDate: h.finishedDate,
                     status: h.status,
                     imageUrls: h.imageURL,
-                    course: new Course(h.c_id, h.courseId, h.courseName, h.i_name),
-                    groupWork: new GroupWork(h.g_id, new Teammate(h.tm_id, h.prefix_name,h.tm_name, h.assigned,h.done_status, h.tm_code))
-                  }
+                    course: new Course(
+                      h.c_id,
+                      h.courseId,
+                      h.courseName,
+                      h.i_name
+                    ),
+                    groupWork: new GroupWork(
+                      h.g_id,
+                      new Teammate(
+                        h.tm_id,
+                        h.prefix_name,
+                        h.tm_name,
+                        h.assigned,
+                        h.done_status,
+                        h.tm_code
+                      )
+                    ),
+                  };
                 }
               });
             }),
@@ -96,9 +121,11 @@ export class HomeworkEffects {
   deleteHomework = createEffect(() =>
     this.actions$.pipe(
       ofType<HomeworkAction.DeleteHomework>(HomeworkAction.DELETE_HOMEWORK),
-      switchMap((deleteId) => {
+      switchMap((hDelete) => {
         return this.http
-          .delete<{ message: string }>(this.homeworkApi + deleteId.payload)
+          .delete<{ message: string }>(
+            this.homeworkApi + hDelete.payloadId + '/' + hDelete.delFilter
+          )
           .pipe(
             tap((res) => {
               console.log(res.message);
@@ -146,7 +173,7 @@ export class HomeworkEffects {
           .put<{ message: string }>(this.homeworkApi, changedId)
           .pipe(
             map(() => {
-              return {type: 'DUMMY ACTION'};
+              return { type: 'DUMMY ACTION' };
             }),
             catchError((err) => {
               console.log(err);

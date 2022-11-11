@@ -1,5 +1,19 @@
+
 const mysql = require("mysql2/promise");
 
+//* MYSQL Database connection
+// const pool = mysql.createPool('mysql://nv0qerzanlgdeyh80wjp:main-2022-oct-30-p02leq@ap-southeast.connect.psdb.cloud/homework-management?ssl={"rejectUnauthorized":true}')
+
+// const pool = mysql.createPool({
+//   host: 'ap-southeast.connect.psdb.cloud',
+//   user: 'nv0qerzanlgdeyh80wjp',
+//   password: 'main-2022-oct-30-p02leq',
+//   database: 'homework-management',
+//   ssl: {
+//     rejectUnauthorized: true
+//   }
+// });
+//- test mode
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",

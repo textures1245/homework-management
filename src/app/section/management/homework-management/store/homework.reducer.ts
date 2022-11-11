@@ -101,7 +101,7 @@ export function HomeworkReducer(
       return {
         ...state,
         homeworks: state.homeworks.filter((h) => {
-          return h.h_id !== action.payload;
+          return h.h_id !== action.payloadId;
         }),
       };
     case HomeworkAction.FINISHED_HOMEWORK:

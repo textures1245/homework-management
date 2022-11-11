@@ -37,7 +37,7 @@ export class UpdateHomework implements Action {
 export class DeleteHomework implements Action {
   readonly type = DELETE_HOMEWORK;
 
-  constructor(public payload: number) {}
+  constructor(public payloadId: number, public delFilter: string | null ) {}
 }
 
 export class FinishedHomework implements Action {

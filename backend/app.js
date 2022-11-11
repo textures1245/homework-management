@@ -1,10 +1,11 @@
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("mysql2");
 const cors = require("cors");
 const app = express();
 const path = require("path");
-const fs = require('fs');
+const fs = require("fs");
 
 //* controllers
 const hController = require("./controllers/homeworkController");
@@ -30,16 +31,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.post("/upload", upload.single("image"), (req, res) => {
-  let oldPath = req.file.path
-  let newPath = `src/assets/images/${req.file.filename}`
+  let oldPath = req.file.path;
+  let newPath = `src/assets/images/${req.file.filename}`;
   fs.rename(oldPath, newPath, (err) => {
-    if (err) throw err
-    console.log(err)
-  })
+    if (err) throw err;
+    console.log(err);
+  });
   res.send({
-    message: 'Image uploaded',
-    imagePath: newPath
-  })
+    message: "Image uploaded",
+    imagePath: newPath,
+  });
 });
 
 // app.get("/upload", (req, res, next) => {
@@ -50,6 +51,18 @@ app.post("/upload", upload.single("image"), (req, res) => {
 app.use(bodyParser.json());
 
 //* MYSQL Database connection
+//- production mode
+// const pool = mysql.createPool('mysql://nv0qerzanlgdeyh80wjp:main-2022-oct-30-p02leq@ap-southeast.connect.psdb.cloud/homework-management?ssl={"rejectUnauthorized":true}')
+// const pool = mysql.createPool({
+//   host: 'ap-southeast.connect.psdb.cloud',
+//   user: 'nv0qerzanlgdeyh80wjp',
+//   password: 'main-2022-oct-30-p02leq',
+//   database: 'homework-management',
+//   ssl: {
+//     rejectUnauthorized: true
+//   }
+// });
+//- test mode
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
@@ -77,7 +90,10 @@ app.put("/api/homeworks/:mode", catchAsync(homeworkRouter.fetchHomework));
 app.post("/api/homeworks", catchAsync(homeworkRouter.postHomework));
 
 //* delete homework with primary key
-app.delete("/api/homeworks/:id", catchAsync(homeworkRouter.deleteHomework));
+app.delete(
+  "/api/homeworks/:id/:delFilter",
+  catchAsync(homeworkRouter.deleteHomework)
+);
 
 //* update homework and fk table
 app.patch("/api/homeworks", catchAsync(homeworkRouter.updatedHomework));

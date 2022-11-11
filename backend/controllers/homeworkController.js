@@ -1,6 +1,19 @@
+
 const mysql = require("mysql2/promise");
 
 //* MYSQL Database connection
+// const pool = mysql.createPool('mysql://nv0qerzanlgdeyh80wjp:main-2022-oct-30-p02leq@ap-southeast.connect.psdb.cloud/homework-management?ssl={"rejectUnauthorized":true}')
+
+// const pool = mysql.createPool({
+//   host: 'ap-southeast.connect.psdb.cloud',
+//   user: 'nv0qerzanlgdeyh80wjp',
+//   password: 'main-2022-oct-30-p02leq',
+//   database: 'homework-management',
+//   ssl: {
+//     rejectUnauthorized: true
+//   }
+// });
+//- test mode
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
@@ -143,7 +156,6 @@ module.exports.addGroupHomework = async (
   LIMIT 1;
   END;`;
 
-
   await pool.execute(
     `CALL insertGroupHomeworkRecords(?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?)`,
     [
@@ -174,6 +186,54 @@ module.exports.addGroupHomework = async (
 
   if (res) {
     console.log("Add Group Homework record successfully.");
+  }
+};
+
+module.exports.deleteGroupHomework = async (h_id) => {
+  const qr_procedure = `
+  CREATE PROCEDURE removeGroupHomeworkAndFKrecord(IN hId INT, IN dateId INT, IN imgId INT, IN gId INT, IN tmId INT)
+  BEGIN
+	DELETE FROM Homework
+	WHERE h_id = hId;
+	DELETE FROM HomeworkDate
+	WHERE date_id = dateId;
+	DELETE FROM Image_store
+	WHERE img_store_id = imgId;
+	DELETE FROM GroupWork
+	WHERE g_id = gId;
+	DELETE FROM Teammate
+	WHERE tm_id = tmId;
+  END;
+  `;
+  const [targetDelete] = await pool.query(
+    `SELECT h.date_id, h.img_store_id, h.g_id, t.tm_id
+    FROM Homework as h INNER JOIN GroupWork gw ON h.g_id = gw.g_id
+    INNER JOIN Teammate t ON gw.g_id = t.g_id
+    WHERE h_id = ?`,
+    [h_id]
+  );
+
+  const fks_target = {
+    date_id: targetDelete[0].date_id,
+    img_store_id: targetDelete[0].img_store_id,
+    g_id: targetDelete[0].g_id,
+    tm_id: targetDelete[0].tm_id,
+  };
+
+  const res = await pool.query(
+    `CALL removeGroupHomeworkAndFKrecord(?, ?, ?, ?, ?)`,
+    [
+      h_id,
+      fks_target.date_id,
+      fks_target.img_store_id,
+      fks_target.g_id,
+      fks_target.tm_id,
+    ]
+  );
+
+  if (res) {
+    console.log(`Delete homework record at h_id: ${h_id} and FK on date_id: ${fks_target.date_id},
+    img_store_id: ${fks_target.img_store_id}, g_id: ${fks_target.g_id}, tm_id: ${fks_target.tm_id}`);
   }
 };
 

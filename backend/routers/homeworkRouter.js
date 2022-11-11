@@ -82,8 +82,13 @@ module.exports.updatedHomework = async (req, res, next) => {
 
 module.exports.deleteHomework = async (req, res, next) => {
   const h_id = +req.params.id;
+  const deleteFilter = req.params.delFilter
   if (h_id != -1 && h_id) {
-    await hController.deleteHomework(h_id);
+    if (deleteFilter === 'delAsGroup') {
+      await hController.deleteGroupHomework(h_id);
+    } else {
+      await hController.deleteHomework(h_id);
+    }
   }
   res.status(200).json({
     message: `Delete Homework Action Successfully on h_id ${h_id}`,

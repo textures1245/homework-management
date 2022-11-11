@@ -186,7 +186,7 @@ export class HomeworkManagementComponent implements OnInit, OnDestroy {
               prefixName: new FormControl(teammateObj.prefixName[i]),
               name: new FormControl(teammateObj.name[i], Validators.required),
               assigned: new FormControl(
-                teammateObj.done_status[i],
+                teammateObj.assigned[i],
                 Validators.required
               ),
               done_status: new FormControl(teammateObj.done_status[i] ?? 0),
